@@ -1,2 +1,2 @@
-# obj_deep_equal
+# objDeepEqual
 Trying to compare objects
