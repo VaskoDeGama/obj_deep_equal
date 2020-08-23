@@ -99,8 +99,8 @@ describe('DeepEqual:', () => {
     expect(result).toBeTruthy()
   })
   test('should be false if compare not simple objects', () => {
-    const obj1 = { b: 2, a: 1 }
-    const obj2 = { a: 1, b: 2 }
+    const obj1 = { b: 2, a: 1, c: () => {} }
+    const obj2 = { a: 1, b: 2, c: () => {} }
     const result = objDeepEqual(obj1, obj2)
     expect(result).toBeFalsy()
   })
