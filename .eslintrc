@@ -16,8 +16,7 @@
     // enable additional rules
     "linebreak-style": ["error", "unix"],
     "quotes": ["error", "single"],
-    "semi": ["error", "never"],
-    "no-console": "warn"
+    "semi": ["error", "never"]
   },
   "plugins": ["import","jest", "babel"]
 }

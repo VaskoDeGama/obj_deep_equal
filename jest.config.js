@@ -1,4 +1,5 @@
 module.exports = {
+  verbose: true,
   projects: [
     {
       runner: 'jest-runner-eslint',
@@ -8,7 +9,8 @@ module.exports = {
     {
       displayName: 'test',
       collectCoverageFrom: ['./src/**/*.js'],
-      coveragePathIgnorePatterns: ['/node_modules/'],
+      testPathIgnorePatterns: ['/node_modules/', '/dist/'],
+      coveragePathIgnorePatterns: ['/node_modules/', '/dist/'],
       coverageThreshold: {
         global: {
           statements: 100,
