@@ -1,3 +1,3 @@
-const objDeepEqual = require('./objDeepEqual.js')
+const { objDeepEqual } = require('./objDeepEqual.js')
 
 objDeepEqual(1, 1)
