@@ -80,7 +80,7 @@ describe('DeepEqual:', () => {
     })
     test('should be true if same symbols', () => {
       const type1 = Symbol('a')
-      const type2 = Symbol('a')
+      const type2 = type1
       const result = objDeepEqual(type1, type2)
       expect(result).toBeTruthy()
     })
