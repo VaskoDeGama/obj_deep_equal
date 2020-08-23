@@ -31,16 +31,24 @@ describe('IsSimple:', () => {
       const result = isSimple(typeof 'str')
       expect(result).toBeTruthy()
     })
-    test('should return true if  number', () => {
+    test('should return true if number', () => {
       const result = isSimple(typeof 1)
       expect(result).toBeTruthy()
     })
-    test('should return true if  boolean', () => {
+    test('should return true if boolean', () => {
       const result = isSimple(typeof true)
       expect(result).toBeTruthy()
     })
-    test('should return true if  undefined', () => {
+    test('should return true if undefined', () => {
       const result = isSimple(typeof undefined)
+      expect(result).toBeTruthy()
+    })
+    test('should return true if Bigint', () => {
+      const result = isSimple(typeof 123n)
+      expect(result).toBeTruthy()
+    })
+    test('should return true if symbol', () => {
+      const result = isSimple(typeof Symbol('a'))
       expect(result).toBeTruthy()
     })
   })
@@ -84,6 +92,18 @@ describe('DeepEqual:', () => {
       const result = objDeepEqual(type1, type2)
       expect(result).toBeTruthy()
     })
+    test('should be true if same boolean', () => {
+      const type1 = true
+      const type2 = true
+      const result = objDeepEqual(type1, type2)
+      expect(result).toBeTruthy()
+    })
+    test('should be true if same BigInt', () => {
+      const type1 = 123n
+      const type2 = 123n
+      const result = objDeepEqual(type1, type2)
+      expect(result).toBeTruthy()
+    })
   })
 
   test('should be true if compare null', () => {
@@ -98,10 +118,22 @@ describe('DeepEqual:', () => {
     const result = objDeepEqual(obj1, obj2)
     expect(result).toBeTruthy()
   })
-  test('should be false if compare not simple objects', () => {
+  test('should be true if compare  objects with  property object', () => {
+    const obj1 = { a: 'str', c: { b: { f: null } } }
+    const obj2 = { a: 'str', c: { b: { f: null } } }
+    const result = objDeepEqual(obj1, obj2)
+    expect(result).toBeTruthy()
+  })
+  test('should be false if compare not objects with methods', () => {
     const obj1 = { b: 2, a: 1, c: () => {} }
     const obj2 = { a: 1, b: 2, c: () => {} }
     const result = objDeepEqual(obj1, obj2)
     expect(result).toBeFalsy()
+  })
+  test('should be false if compare array', () => {
+    const obj1 = ['str', null, 1]
+    const obj2 = ['str', null, 1]
+    const result = objDeepEqual(obj1, obj2)
+    expect(result).toBeTruthy()
   })
 })

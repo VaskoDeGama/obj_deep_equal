@@ -19,6 +19,12 @@ function objDeepEqual(a, b) {
       return a === b
     }
     if (typeof a === 'object') {
+      if (Array.isArray(a) && Array.isArray(b)) {
+        if (a.length !== b.length) {
+          return false
+        }
+        return a.every((item, index) => objDeepEqual(item, b[index]))
+      }
       return Object.keys(a).every(
         (key) =>
           Object.prototype.hasOwnProperty.call(b, key) &&
