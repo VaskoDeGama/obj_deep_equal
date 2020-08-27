@@ -1,4 +1,4 @@
-const { objDeepEqual, isSimple } = require('./objDeepEqual.js')
+const { objDeepEqual } = require('./objDeepEqual.js')
 
 expect.extend({
   toBeBoolean(received) {
@@ -12,46 +12,6 @@ expect.extend({
           pass: false,
         }
   },
-})
-
-describe('IsSimple:', () => {
-  test('should be defined', () => {
-    expect(isSimple).toBeDefined()
-  })
-  test('should return boolean', () => {
-    const result = isSimple(typeof 's')
-    expect(result).toBeBoolean()
-  })
-  test('should return false if null', () => {
-    const result = isSimple(typeof null)
-    expect(result).toBeFalsy()
-  })
-  describe('will be true with simple types', () => {
-    test('should return true if str', () => {
-      const result = isSimple(typeof 'str')
-      expect(result).toBeTruthy()
-    })
-    test('should return true if number', () => {
-      const result = isSimple(typeof 1)
-      expect(result).toBeTruthy()
-    })
-    test('should return true if boolean', () => {
-      const result = isSimple(typeof true)
-      expect(result).toBeTruthy()
-    })
-    test('should return true if undefined', () => {
-      const result = isSimple(typeof undefined)
-      expect(result).toBeTruthy()
-    })
-    test('should return true if Bigint', () => {
-      const result = isSimple(typeof 123n)
-      expect(result).toBeTruthy()
-    })
-    test('should return true if symbol', () => {
-      const result = isSimple(typeof Symbol('a'))
-      expect(result).toBeTruthy()
-    })
-  })
 })
 
 describe('DeepEqual:', () => {
@@ -105,12 +65,12 @@ describe('DeepEqual:', () => {
       [3, 'three'],
     ])
     const type2 = new Map([
-      [1, '1'],
+      [1, 'one'],
       [2, 'two'],
-      // [3, 'three'],
+      [3, 'three'],
     ])
     const result = objDeepEqual(type1, type2)
-    expect(result).toBeFalsy()
+    expect(result).toBeTruthy()
   })
 
   describe('compare simple same types', () => {
