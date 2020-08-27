@@ -67,6 +67,52 @@ describe('DeepEqual:', () => {
     const result = objDeepEqual(obj, obj)
     expect(result).toBeTruthy()
   })
+  test('should be true if compare null', () => {
+    const type1 = null
+    const type2 = null
+    const result = objDeepEqual(type1, type2)
+    expect(result).toBeTruthy()
+  })
+  test('should be true if compare simple objects', () => {
+    const obj1 = { a: 1, b: 2 }
+    const obj2 = { a: 1, b: 2 }
+    const result = objDeepEqual(obj1, obj2)
+    expect(result).toBeTruthy()
+  })
+  test('should be true if compare  objects with  property object', () => {
+    const obj1 = { a: 'str', c: { b: { f: null } } }
+    const obj2 = { a: 'str', c: { b: { f: null } } }
+    const result = objDeepEqual(obj1, obj2)
+    expect(result).toBeTruthy()
+  })
+  test('should be true if compare objects with methods', () => {
+    const method = () => {}
+    const obj1 = { b: 2, a: 1, c: method }
+    const obj2 = { a: 1, b: 2, c: method }
+    const result = objDeepEqual(obj1, obj2)
+    expect(result).toBeTruthy()
+  })
+  test('should be true if compare array', () => {
+    const obj1 = ['str', null, 1]
+    const obj2 = ['str', null, 1]
+    const result = objDeepEqual(obj1, obj2)
+    expect(result).toBeTruthy()
+  })
+  test('should be false if compare Map', () => {
+    const type1 = new Map([
+      [1, 'one'],
+      [2, 'two'],
+      [3, 'three'],
+    ])
+    const type2 = new Map([
+      [1, '1'],
+      [2, 'two'],
+      // [3, 'three'],
+    ])
+    const result = objDeepEqual(type1, type2)
+    expect(result).toBeFalsy()
+  })
+
   describe('compare simple same types', () => {
     test('should be true if same numbers', () => {
       const type1 = 1
@@ -104,37 +150,5 @@ describe('DeepEqual:', () => {
       const result = objDeepEqual(type1, type2)
       expect(result).toBeTruthy()
     })
-  })
-
-  test('should be true if compare null', () => {
-    const type1 = null
-    const type2 = null
-    const result = objDeepEqual(type1, type2)
-    expect(result).toBeTruthy()
-  })
-  test('should be true if compare simple objects', () => {
-    const obj1 = { a: 1, b: 2 }
-    const obj2 = { a: 1, b: 2 }
-    const result = objDeepEqual(obj1, obj2)
-    expect(result).toBeTruthy()
-  })
-  test('should be true if compare  objects with  property object', () => {
-    const obj1 = { a: 'str', c: { b: { f: null } } }
-    const obj2 = { a: 'str', c: { b: { f: null } } }
-    const result = objDeepEqual(obj1, obj2)
-    expect(result).toBeTruthy()
-  })
-  test('should be true if compare objects with methods', () => {
-    const method = () => {}
-    const obj1 = { b: 2, a: 1, c: method }
-    const obj2 = { a: 1, b: 2, c: method }
-    const result = objDeepEqual(obj1, obj2)
-    expect(result).toBeTruthy()
-  })
-  test('should be true if compare array', () => {
-    const obj1 = ['str', null, 1]
-    const obj2 = ['str', null, 1]
-    const result = objDeepEqual(obj1, obj2)
-    expect(result).toBeTruthy()
   })
 })
