@@ -52,6 +52,13 @@ describe('DeepEqual:', () => {
     const result = objDeepEqual(obj1, obj2)
     expect(result).toBeTruthy()
   })
+  test('should be true if compare functions', () => {
+    const method = () => {}
+    const obj1 = method
+    const obj2 = method
+    const result = objDeepEqual(obj1, obj2)
+    expect(result).toBeTruthy()
+  })
   test('should be true if compare array', () => {
     const obj1 = ['str', null, 1]
     const obj2 = ['str', null, 1]

@@ -23,9 +23,45 @@ function objDeepEqual(a, b) {
   if (a === null || b === null) {
     return a === b
   }
-  if (isSimple(typeof a) || isSimple(typeof b)) {
+  if (isSimple(typeof a) && isSimple(typeof b)) {
     return a === b
   }
+  const notPrimitiveTypeA = getNotPrimitiveType(a)
+  const notPrimitiveTypeB = getNotPrimitiveType(b)
+  if (notPrimitiveTypeA === notPrimitiveTypeB) {
+    switch (notPrimitiveTypeB) {
+      case Map: {
+        console.log('Map', a, b)
+        break
+      }
+      case WeakMap: {
+        console.log('WeakMap', a, b)
+        break
+      }
+      case Set: {
+        console.log('Set', a, b)
+        break
+      }
+      case WeakSet: {
+        console.log('WeakSet', a, b)
+        break
+      }
+      case Object: {
+        return Object.keys(a).every(
+          (key) =>
+            Object.prototype.hasOwnProperty.call(b, key) &&
+            objDeepEqual(a[key], b[key])
+        )
+      }
+      case Function: {
+        return a === b
+      }
+      default: {
+        return a === b
+      }
+    }
+  }
+
   return a === b
 }
 
