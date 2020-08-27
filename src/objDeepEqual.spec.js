@@ -65,7 +65,7 @@ describe('DeepEqual:', () => {
     const result = objDeepEqual(obj1, obj2)
     expect(result).toBeTruthy()
   })
-  test('should be false if compare Map', () => {
+  test('should be true if compare same Map', () => {
     const type1 = new Map([
       [1, 'one'],
       [2, 'two'],
@@ -78,6 +78,20 @@ describe('DeepEqual:', () => {
     ])
     const result = objDeepEqual(type1, type2)
     expect(result).toBeTruthy()
+  })
+  test('should be false if compare notSame Map', () => {
+    const type1 = new Map([
+      [1, 'one'],
+      [2, 'two'],
+      [3, 'three'],
+    ])
+    const type2 = new Map([
+      [1, 'two'],
+      [2, 'two'],
+      [3, 'three'],
+    ])
+    const result = objDeepEqual(type1, type2)
+    expect(result).toBeFalsy()
   })
 
   describe('compare simple same types', () => {
