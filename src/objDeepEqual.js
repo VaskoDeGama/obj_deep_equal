@@ -31,6 +31,9 @@ function objDeepEqual(a, b) {
           objDeepEqual(a[key], b[key])
       )
     }
+    if (typeof a === 'function') {
+      return a === b
+    }
   }
   return a === b
 }
