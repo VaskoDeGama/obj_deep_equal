@@ -34,5 +34,9 @@ describe('getNotPrimitiveType:', () => {
     const result = getNotPrimitiveType(test)
     expect(result).toEqual(Object)
   })
-  describe('will be true with simple types', () => {})
+  test('should return Array', () => {
+    const test = []
+    const result = getNotPrimitiveType(test)
+    expect(result).toEqual(Array)
+  })
 })
