@@ -24,7 +24,7 @@ function getNotPrimitiveType(value) {
   if (typeof value === 'function') {
     return Function
   }
-  const NOT_PRIMITIVE_TYPES = [Map, Set, WeakMap, WeakSet, Array]
+  const NOT_PRIMITIVE_TYPES = [Map, Set, WeakMap, WeakSet, Array, Date]
   const [result] = NOT_PRIMITIVE_TYPES.filter((type) => value instanceof type)
   return result || Object
 }
@@ -97,6 +97,9 @@ function objDeepEqual(a, b) {
           a.length === b.length &&
           a.every((item, index) => objDeepEqual(item, b[index]))
         )
+      }
+      case Date: {
+        return a.getTime() === b.getTime()
       }
       case Object: {
         return Object.keys(a).every(

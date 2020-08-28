@@ -128,6 +128,18 @@ describe('DeepEqual:', () => {
     const result = objDeepEqual(type1, type2)
     expect(result).toBeTruthy()
   })
+  test('should be true if compare same Date', () => {
+    const type1 = new Date()
+    const type2 = new Date()
+    const result = objDeepEqual(type1, type2)
+    expect(result).toBeTruthy()
+  })
+  test('should be false if compare not same Date', () => {
+    const type1 = new Date()
+    const type2 = new Date(type1 + 1)
+    const result = objDeepEqual(type1, type2)
+    expect(result).toBeFalsy()
+  })
 
   describe('compare simple same types', () => {
     test('should be true if same numbers', () => {
