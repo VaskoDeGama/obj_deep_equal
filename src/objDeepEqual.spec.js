@@ -65,6 +65,12 @@ describe('DeepEqual:', () => {
     const result = objDeepEqual(obj1, obj2)
     expect(result).toBeTruthy()
   })
+  test('should be false if compare not same array', () => {
+    const obj1 = ['str', null, 1]
+    const obj2 = ['str', undefined, 1]
+    const result = objDeepEqual(obj1, obj2)
+    expect(result).toBeFalsy()
+  })
   test('should be true if compare same Map', () => {
     const type1 = new Map([
       [1, 'one'],
@@ -104,6 +110,23 @@ describe('DeepEqual:', () => {
     const type2 = new Set('Tetring')
     const result = objDeepEqual(type1, type2)
     expect(result).toBeFalsy()
+  })
+  test('should be true if compare same WeakMap', () => {
+    const key = { a: 1 }
+    const value = 'value'
+    const type1 = new WeakMap()
+    type1.set(key, value)
+    const type2 = type1
+    const result = objDeepEqual(type1, type2)
+    expect(result).toBeTruthy()
+  })
+  test('should be true if compare same WeakSet', () => {
+    const value = { a: 1 }
+    const type1 = new WeakSet()
+    type1.add(value)
+    const type2 = type1
+    const result = objDeepEqual(type1, type2)
+    expect(result).toBeTruthy()
   })
 
   describe('compare simple same types', () => {

@@ -14,7 +14,7 @@ function getNotPrimitiveType(value) {
   if (typeof value === 'function') {
     return Function
   }
-  const NOT_PRIMITIVE_TYPES = [Map, Set, WeakMap, WeakSet]
+  const NOT_PRIMITIVE_TYPES = [Map, Set, WeakMap, WeakSet, Array]
   const [result] = NOT_PRIMITIVE_TYPES.filter((type) => value instanceof type)
   return result || Object
 }
@@ -57,14 +57,14 @@ function objDeepEqual(a, b) {
       case Map: {
         return a.size === b.size && all(a, isInMap(b))
       }
-      case WeakMap: {
-        return a.size === b.size && all(a, isInMap(b))
-      }
       case Set: {
         return a.size === b.size && all(a, isInSet(b))
       }
-      case WeakSet: {
-        return a.size === b.size && all(a, isInSet(b))
+      case Array: {
+        return (
+          a.length === b.length &&
+          a.every((item, index) => objDeepEqual(item, b[index]))
+        )
       }
       case Object: {
         return Object.keys(a).every(
@@ -72,9 +72,6 @@ function objDeepEqual(a, b) {
             Object.prototype.hasOwnProperty.call(b, key) &&
             objDeepEqual(a[key], b[key])
         )
-      }
-      case Function: {
-        return a === b
       }
       default: {
         return a === b
