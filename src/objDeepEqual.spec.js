@@ -107,7 +107,7 @@ describe('DeepEqual:', () => {
   })
   test('should be false if compare notSame Set', () => {
     const type1 = new Set('TestString')
-    const type2 = new Set('Tetring')
+    const type2 = new Set('test')
     const result = objDeepEqual(type1, type2)
     expect(result).toBeFalsy()
   })

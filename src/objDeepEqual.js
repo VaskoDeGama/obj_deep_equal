@@ -72,7 +72,7 @@ function all(obj, predicate) {
  * WeakMap,WeakSet,Function, = compares by link
  * @param a
  * @param b
- * @returns {boolean|*|boolean}
+ * @returns {boolean}
  */
 
 function objDeepEqual(a, b) {
