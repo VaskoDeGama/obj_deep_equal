@@ -1,4 +1,4 @@
-const { all, isInMap } = require('./objDeepEqual.js')
+const { all, isInMap, isInSet } = require('./objDeepEqual.js')
 
 expect.extend({
   toBeBoolean(received) {
@@ -36,6 +36,27 @@ describe('isIn:', () => {
     })
     test('should be return true with testMap and 1', () => {
       expect(isInMap(testMap)(1, 'one')).toBeTruthy()
+    })
+  })
+})
+describe('isInSet:', () => {
+  let testSet = null
+  beforeAll(() => {
+    testSet = new Set('test')
+  })
+
+  test('should be defined', () => {
+    expect(isInSet).toBeDefined()
+  })
+  test('should return function', () => {
+    expect(typeof isInSet(testSet)).toBe('function')
+  })
+  describe('returned function:', () => {
+    test('should be return false with testSet and "a"', () => {
+      expect(isInSet(testSet)('a')).toBeFalsy()
+    })
+    test('should be return true with testSet and "t"', () => {
+      expect(isInSet(testSet)('t')).toBeTruthy()
     })
   })
 })

@@ -90,5 +90,6 @@ module.exports = {
   objDeepEqual,
   getNotPrimitiveType,
   isInMap,
+  isInSet,
   all,
 }
