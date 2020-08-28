@@ -19,17 +19,17 @@ function getNotPrimitiveType(value) {
   return result || Object
 }
 
-// Map, Set, WeakMap, WeakSet
-
+// Map
 function isIn(obj) {
   return function check(key, value) {
     return obj.has(key) && obj.get(key) === value
   }
 }
 
-// check predicate for all entries in Map, Set, WeakMap, WeakSet
+// check predicate for all entries in Map
 
 function all(obj, predicate) {
+  console.log(obj, predicate)
   for (const [key, value] of obj) {
     if (!predicate(key, value)) {
       return false
@@ -53,13 +53,13 @@ function objDeepEqual(a, b) {
         return a.size === b.size && all(a, isIn(b))
       }
       case WeakMap: {
-        break
+        return false
       }
       case Set: {
-        break
+        return false
       }
       case WeakSet: {
-        break
+        return false
       }
       case Object: {
         return Object.keys(a).every(

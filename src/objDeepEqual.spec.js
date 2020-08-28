@@ -93,6 +93,12 @@ describe('DeepEqual:', () => {
     const result = objDeepEqual(type1, type2)
     expect(result).toBeFalsy()
   })
+  test('should be true if compare same Set', () => {
+    const type1 = new Set('TestString')
+    const type2 = new Set('TestString')
+    const result = objDeepEqual(type1, type2)
+    expect(result).toBeTruthy()
+  })
 
   describe('compare simple same types', () => {
     test('should be true if same numbers', () => {
