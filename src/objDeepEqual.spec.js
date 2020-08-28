@@ -99,6 +99,12 @@ describe('DeepEqual:', () => {
     const result = objDeepEqual(type1, type2)
     expect(result).toBeTruthy()
   })
+  test('should be false if compare notSame Set', () => {
+    const type1 = new Set('TestString')
+    const type2 = new Set('Tetring')
+    const result = objDeepEqual(type1, type2)
+    expect(result).toBeFalsy()
+  })
 
   describe('compare simple same types', () => {
     test('should be true if same numbers', () => {

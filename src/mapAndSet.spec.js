@@ -1,4 +1,4 @@
-const { all, isIn } = require('./objDeepEqual.js')
+const { all, isInMap } = require('./objDeepEqual.js')
 
 expect.extend({
   toBeBoolean(received) {
@@ -25,17 +25,17 @@ describe('isIn:', () => {
   })
 
   test('should be defined', () => {
-    expect(isIn).toBeDefined()
+    expect(isInMap).toBeDefined()
   })
   test('should return function', () => {
-    expect(typeof isIn(testMap)).toBe('function')
+    expect(typeof isInMap(testMap)).toBe('function')
   })
   describe('returned function:', () => {
     test('should be return false with testMap and 4', () => {
-      expect(isIn(testMap)(4, 'four')).toBeFalsy()
+      expect(isInMap(testMap)(4, 'four')).toBeFalsy()
     })
     test('should be return true with testMap and 1', () => {
-      expect(isIn(testMap)(1, 'one')).toBeTruthy()
+      expect(isInMap(testMap)(1, 'one')).toBeTruthy()
     })
   })
 })
@@ -66,12 +66,12 @@ describe('all:', () => {
     expect(all).toBeDefined()
   })
   test('should return boolean', () => {
-    expect(all(testMap, isIn(testMap))).toBeBoolean()
+    expect(all(testMap, isInMap(testMap))).toBeBoolean()
   })
   test('should be return false with testMap and notEqualMap', () => {
-    expect(all(testMap, isIn(notEqualMap))).toBeFalsy()
+    expect(all(testMap, isInMap(notEqualMap))).toBeFalsy()
   })
   test('should be return true with testMap and equalMap', () => {
-    expect(all(testMap, isIn(equalMap))).toBeTruthy()
+    expect(all(testMap, isInMap(equalMap))).toBeTruthy()
   })
 })
