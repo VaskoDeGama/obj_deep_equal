@@ -53,7 +53,15 @@ describe('DeepEqual:', () => {
     const result = objDeepEqual(obj1, obj2)
     expect(result).toBeTruthy()
   })
+  test('should br true if compare objects with Symbols key', () => {
+    const key1 = Symbol('key1')
+    const key2 = Symbol('key1')
+    const obj1 = { key1: 'value' }
+    const obj2 = { key1: 'value' }
+    expect(objDeepEqual(obj1, obj2)).toBeTruthy()
+  })
 
+  // function
   test('should be true if compare functions', () => {
     const method = () => {}
     const obj1 = method
@@ -150,8 +158,8 @@ describe('DeepEqual:', () => {
       expect(result).toBeFalsy()
     })
   })
-  // simple types
 
+  // simple type
   describe('compare simple same types', () => {
     test('should be true if same numbers', () => {
       const type1 = 1

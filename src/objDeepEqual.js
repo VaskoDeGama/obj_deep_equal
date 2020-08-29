@@ -101,6 +101,8 @@ function objDeepEqual(a, b) {
         )
       }
       case Object: {
+        // TODO: how compare with symbol's key?
+        // Object.keys(a) where a it is object with symbol key return arr of str id symbol (bad)
         return Object.keys(a).every(
           (key) =>
             Object.prototype.hasOwnProperty.call(b, key) && a[key] === b[key]
