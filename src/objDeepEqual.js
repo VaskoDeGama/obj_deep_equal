@@ -92,20 +92,18 @@ function objDeepEqual(a, b) {
       case Set: {
         return a.size === b.size && all(a, isInSet(b))
       }
-      case Array: {
-        return (
-          a.length === b.length &&
-          a.every((item, index) => objDeepEqual(item, b[index]))
-        )
-      }
       case Date: {
         return a.getTime() === b.getTime()
+      }
+      case Array: {
+        return (
+          a.length === b.length && a.every((item, index) => item === b[index])
+        )
       }
       case Object: {
         return Object.keys(a).every(
           (key) =>
-            Object.prototype.hasOwnProperty.call(b, key) &&
-            objDeepEqual(a[key], b[key])
+            Object.prototype.hasOwnProperty.call(b, key) && a[key] === b[key]
         )
       }
       default: {
