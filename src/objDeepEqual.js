@@ -78,6 +78,9 @@ function objDeepEqual(a, b) {
   if (isSimple(typeof a) && isSimple(typeof b)) {
     return a === b
   }
+  if (a.constructor !== b.constructor) {
+    return false
+  }
   const notPrimitiveTypeA = getNotPrimitiveType(a)
   const notPrimitiveTypeB = getNotPrimitiveType(b)
   if (notPrimitiveTypeA === notPrimitiveTypeB) {
@@ -114,9 +117,6 @@ function objDeepEqual(a, b) {
         return false
       }
       default: {
-        if (a.constructor !== b.constructor) {
-          return false
-        }
         return a === b
       }
     }
