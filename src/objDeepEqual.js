@@ -3,15 +3,16 @@
  * @param type - typeof
  * @returns {boolean}
  */
+const SIMPLE_TYPES = [
+  'boolean',
+  'undefined',
+  'number',
+  'string',
+  'symbol',
+  'bigint',
+]
+
 function isSimple(type) {
-  const SIMPLE_TYPES = [
-    'boolean',
-    'undefined',
-    'number',
-    'string',
-    'symbol',
-    'bigint',
-  ]
   return SIMPLE_TYPES.includes(type)
 }
 
@@ -101,12 +102,21 @@ function objDeepEqual(a, b) {
         )
       }
       case Object: {
-        // TODO: how compare with symbol's key?
-        // Object.keys(a) where a it is object with symbol key return arr of str id symbol (bad)
-        return Object.keys(a).every(
-          (key) =>
-            Object.prototype.hasOwnProperty.call(b, key) && a[key] === b[key]
-        )
+        const keysA = [
+          ...Object.getOwnPropertySymbols(a),
+          ...Object.getOwnPropertyNames(a),
+        ]
+        const keysB = [
+          ...Object.getOwnPropertySymbols(b),
+          ...Object.getOwnPropertyNames(b),
+        ]
+        if (keysA.length === keysB.length) {
+          return keysA.every(
+            (key) =>
+              Object.prototype.hasOwnProperty.call(b, key) && a[key] === b[key]
+          )
+        }
+        return false
       }
       default: {
         return a === b

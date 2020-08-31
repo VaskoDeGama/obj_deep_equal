@@ -53,12 +53,27 @@ describe('DeepEqual:', () => {
     const result = objDeepEqual(obj1, obj2)
     expect(result).toBeTruthy()
   })
-  test('should br true if compare objects with Symbols key', () => {
+
+  test('should be true if compare objects with same Symbols key', () => {
     const key1 = Symbol('key1')
-    const key2 = Symbol('key1')
-    const obj1 = { key1: 'value' }
-    const obj2 = { key1: 'value' }
+    const obj1 = {}
+    obj1[key1] = 'key1'
+    obj1.string = 'stringkey'
+    const obj2 = {}
+    obj2[key1] = 'key1'
+    obj2.string = 'stringkey'
     expect(objDeepEqual(obj1, obj2)).toBeTruthy()
+  })
+  test('should be false if compare objects with not same Symbols key', () => {
+    const key1 = Symbol('key1')
+    const key2 = Symbol('key2')
+    const obj1 = {}
+    obj1[key1] = 'key1'
+    obj1.string = 'stringkey'
+    const obj2 = {}
+    obj2[key2] = 'key2'
+    obj2.string = 'stringkey'
+    expect(objDeepEqual(obj1, obj2)).toBeFalsy()
   })
 
   // function
