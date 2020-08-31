@@ -54,26 +54,128 @@ describe('DeepEqual:', () => {
     expect(result).toBeTruthy()
   })
 
-  test('should be true if compare objects with same Symbols key', () => {
-    const key1 = Symbol('key1')
-    const obj1 = {}
-    obj1[key1] = 'key1'
-    obj1.string = 'stringkey'
-    const obj2 = {}
-    obj2[key1] = 'key1'
-    obj2.string = 'stringkey'
-    expect(objDeepEqual(obj1, obj2)).toBeTruthy()
+  describe('symbols:', () => {
+    test('should be true if compare objects with same Symbols key', () => {
+      const key1 = Symbol('key1')
+      const obj1 = {}
+      obj1[key1] = 'key1'
+      obj1.string = 'stringkey'
+      const obj2 = {}
+      obj2[key1] = 'key1'
+      obj2.string = 'stringkey'
+      expect(objDeepEqual(obj1, obj2)).toBeTruthy()
+    })
+    test('should be false if compare objects with not same Symbols key', () => {
+      const key1 = Symbol('key1')
+      const key2 = Symbol('key2')
+      const obj1 = {}
+      obj1[key1] = 'key1'
+      obj1.string = 'stringkey'
+      const obj2 = {}
+      obj2[key2] = 'key2'
+      obj2.string = 'stringkey'
+      expect(objDeepEqual(obj1, obj2)).toBeFalsy()
+    })
   })
-  test('should be false if compare objects with not same Symbols key', () => {
-    const key1 = Symbol('key1')
-    const key2 = Symbol('key2')
-    const obj1 = {}
-    obj1[key1] = 'key1'
-    obj1.string = 'stringkey'
-    const obj2 = {}
-    obj2[key2] = 'key2'
-    obj2.string = 'stringkey'
-    expect(objDeepEqual(obj1, obj2)).toBeFalsy()
+
+  describe('classes:', () => {
+    test('should be true if compare one instance of class', () => {
+      class Person {
+        constructor(personName, personAge) {
+          this.name = personName
+          this.age = personAge
+        }
+
+        get info() {
+          return this.name
+        }
+      }
+
+      const ivan = new Person('Ivan', 23)
+      expect(objDeepEqual(ivan, ivan)).toBeTruthy()
+    })
+
+    test('should be false if compare two instance of one class', () => {
+      class Person {
+        constructor(personName, personAge) {
+          this.name = personName
+          this.age = personAge
+        }
+
+        get info() {
+          return this.name
+        }
+      }
+
+      const ivan = new Person('Ivan', 23)
+      const oleg = new Person('Oleg', 23)
+      expect(objDeepEqual(ivan, oleg)).toBeFalsy()
+    })
+
+    test('should be false if compare two instance of two class', () => {
+      class Woman {
+        constructor(personName, personAge) {
+          this.name = personName
+          this.age = personAge
+        }
+
+        get info() {
+          return this.name
+        }
+      }
+
+      class Man {
+        constructor(personName, personAge) {
+          this.name = personName
+          this.age = personAge
+        }
+
+        get info() {
+          return this.name
+        }
+      }
+
+      const olga = new Woman('Olga', 23)
+      const oleg = new Man('Oleg', 23)
+      expect(objDeepEqual(olga, oleg)).toBeFalsy()
+    })
+    test('should be true if compare class constructor', () => {
+      class Woman {
+        constructor(personName, personAge) {
+          this.name = personName
+          this.age = personAge
+        }
+
+        get info() {
+          return this.name
+        }
+      }
+      expect(objDeepEqual(Woman, Woman)).toBeTruthy()
+    })
+    test('should be false if compare not same class constructor', () => {
+      class Woman {
+        constructor(personName, personAge) {
+          this.name = personName
+          this.age = personAge
+        }
+
+        get info() {
+          return this.name
+        }
+      }
+
+      class Man {
+        constructor(personName, personAge) {
+          this.name = personName
+          this.age = personAge
+        }
+
+        get info() {
+          return this.name
+        }
+      }
+      expect(objDeepEqual(Woman, Man)).toBeFalsy()
+    })
   })
 
   // function
