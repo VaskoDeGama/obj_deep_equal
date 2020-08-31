@@ -22,12 +22,7 @@ function isSimple(type) {
  * @returns {Function|Map|Set|WeakMap|WeakSet|Array|Object}
  */
 function getNotPrimitiveType(value) {
-  if (typeof value === 'function') {
-    return Function
-  }
-  const NOT_PRIMITIVE_TYPES = [Map, Set, WeakMap, WeakSet, Array, Date]
-  const [result] = NOT_PRIMITIVE_TYPES.filter((type) => value instanceof type)
-  return result || Object
+  return value.constructor
 }
 
 /**
@@ -119,6 +114,9 @@ function objDeepEqual(a, b) {
         return false
       }
       default: {
+        if (a.constructor !== b.constructor) {
+          return false
+        }
         return a === b
       }
     }
