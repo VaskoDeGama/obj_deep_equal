@@ -178,6 +178,66 @@ describe('DeepEqual:', () => {
     })
   })
 
+  test('should be true if compare one instance of class', () => {
+    class Person {
+      constructor(personName, personAge) {
+        this.name = personName
+        this.age = personAge
+      }
+
+      get info() {
+        return this.name
+      }
+    }
+
+    const ivan = new Person('Ivan', 23)
+    expect(objDeepEqual(ivan, ivan)).toBeTruthy()
+  })
+
+  test('should be true if compare two instance of one class', () => {
+    class Person {
+      constructor(personName, personAge) {
+        this.name = personName
+        this.age = personAge
+      }
+
+      get info() {
+        return this.name
+      }
+    }
+
+    const ivan = new Person('Ivan', 23)
+    expect(objDeepEqual(ivan, ivan)).toBeTruthy()
+  })
+
+  test('should be false if compare two instance of two class', () => {
+    class Woman {
+      constructor(personName, personAge) {
+        this.name = personName
+        this.age = personAge
+      }
+
+      get info() {
+        return this.name
+      }
+    }
+
+    class Man {
+      constructor(personName, personAge) {
+        this.name = personName
+        this.age = personAge
+      }
+
+      get info() {
+        return this.name
+      }
+    }
+
+    const olga = new Woman('Olga', 23)
+    const oleg = new Man('Oleg', 23)
+    expect(objDeepEqual(olga, oleg)).toBeFalsy()
+  })
+
   // function
   test('should be true if compare functions', () => {
     const method = () => {}
