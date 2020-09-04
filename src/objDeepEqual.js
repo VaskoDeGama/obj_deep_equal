@@ -1,6 +1,6 @@
 /**
- * isSimple checks if the passed type is simple
- * @param type - typeof
+ * isSimple checks if the passed value is simple
+ * @param value
  * @returns {boolean}
  */
 const SIMPLE_TYPES = [
@@ -12,8 +12,8 @@ const SIMPLE_TYPES = [
   'bigint',
 ]
 
-function isSimple(type) {
-  return SIMPLE_TYPES.includes(type)
+function isSimple(value) {
+  return SIMPLE_TYPES.includes(typeof value)
 }
 
 /**
@@ -75,53 +75,14 @@ function objDeepEqual(a, b) {
   if (a === null || b === null) {
     return a === b
   }
-  if (isSimple(typeof a) && isSimple(typeof b)) {
+  if (isSimple(a) && isSimple(b)) {
     return a === b
   }
-  if (a.constructor !== b.constructor) {
-    return false
+  if (Object.getPrototypeOf(a) === Object.getPrototypeOf(b)) {
+    console.log('Prototype A', Object.getPrototypeOf(a))
+    console.log('Prototype B', Object.getPrototypeOf(b))
   }
-  const notPrimitiveTypeA = getNotPrimitiveType(a)
-  const notPrimitiveTypeB = getNotPrimitiveType(b)
-  if (notPrimitiveTypeA === notPrimitiveTypeB) {
-    switch (notPrimitiveTypeB) {
-      case Map: {
-        return a.size === b.size && all(a, isInMap(b))
-      }
-      case Set: {
-        return a.size === b.size && all(a, isInSet(b))
-      }
-      case Date: {
-        return a.getTime() === b.getTime()
-      }
-      case Array: {
-        return (
-          a.length === b.length && a.every((item, index) => item === b[index])
-        )
-      }
-      case Object: {
-        const keysA = [
-          ...Object.getOwnPropertySymbols(a),
-          ...Object.getOwnPropertyNames(a),
-        ]
-        const keysB = [
-          ...Object.getOwnPropertySymbols(b),
-          ...Object.getOwnPropertyNames(b),
-        ]
-        if (keysA.length === keysB.length) {
-          return keysA.every(
-            (key) =>
-              Object.prototype.hasOwnProperty.call(b, key) && a[key] === b[key]
-          )
-        }
-        return false
-      }
-      default: {
-        return a === b
-      }
-    }
-  }
-  return a === b
+  return false
 }
 
 module.exports = {

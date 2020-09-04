@@ -1,5 +1,5 @@
 module.exports = {
-  verbose: false,
+  verbose: true,
   projects: [
     {
       runner: 'jest-runner-eslint',

@@ -19,36 +19,36 @@ describe('IsSimple:', () => {
     expect(isSimple).toBeDefined()
   })
   test('should return boolean', () => {
-    const result = isSimple(typeof 's')
+    const result = isSimple('s')
     expect(result).toBeBoolean()
   })
   test('should return false if null', () => {
-    const result = isSimple(typeof null)
+    const result = isSimple(null)
     expect(result).toBeFalsy()
   })
   describe('will be true with simple types', () => {
     test('should return true if str', () => {
-      const result = isSimple(typeof 'str')
+      const result = isSimple('str')
       expect(result).toBeTruthy()
     })
     test('should return true if number', () => {
-      const result = isSimple(typeof 1)
+      const result = isSimple(1)
       expect(result).toBeTruthy()
     })
     test('should return true if boolean', () => {
-      const result = isSimple(typeof true)
+      const result = isSimple(true)
       expect(result).toBeTruthy()
     })
     test('should return true if undefined', () => {
-      const result = isSimple(typeof undefined)
+      const result = isSimple(undefined)
       expect(result).toBeTruthy()
     })
     test('should return true if Bigint', () => {
-      const result = isSimple(typeof 123n)
+      const result = isSimple(123n)
       expect(result).toBeTruthy()
     })
     test('should return true if symbol', () => {
-      const result = isSimple(typeof Symbol('a'))
+      const result = isSimple(Symbol('a'))
       expect(result).toBeTruthy()
     })
   })
