@@ -55,13 +55,13 @@ describe('DeepEqual:', () => {
       const result = objDeepEqual(obj1, obj2)
       expect(result).toBeTruthy()
     })
-    test('should be true if compare objects with not same methods', () => {
+    test('should be false if compare objects with not same methods', () => {
       const method = () => {}
       const method2 = () => {}
       const obj1 = { b: 2, a: 1, c: method }
       const obj2 = { a: 1, b: 2, c: method2 }
       const result = objDeepEqual(obj1, obj2)
-      expect(result).toBeTruthy()
+      expect(result).toBeFalsy()
     })
     test('should be false if compare objects with descriptors', () => {
       const obj1 = {
@@ -236,12 +236,14 @@ describe('DeepEqual:', () => {
   })
 
   // function
-  test('should be true if compare functions', () => {
-    const method = () => {}
-    const obj1 = method
-    const obj2 = method
-    const result = objDeepEqual(obj1, obj2)
-    expect(result).toBeTruthy()
+  describe('functions:', () => {
+    test('should be true if compare functions', () => {
+      const method = () => {}
+      const obj1 = method
+      const obj2 = method
+      const result = objDeepEqual(obj1, obj2)
+      expect(result).toBeTruthy()
+    })
   })
 
   // array

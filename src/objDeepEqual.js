@@ -37,6 +37,21 @@ function objDeepEqual(a, b) {
     if (Array.isArray(a)) {
       return a.every((value, index) => value === b[index])
     }
+    if (typeof a === 'function') {
+      return a === b
+    }
+    const keysA = [
+      ...Object.getOwnPropertyNames(a),
+      ...Object.getOwnPropertySymbols(a),
+    ]
+    const keysB = [
+      ...Object.getOwnPropertyNames(b),
+      ...Object.getOwnPropertySymbols(b),
+    ]
+    if (keysB.length !== keysA.length) {
+      return false
+    }
+    return keysA.every((value) => a[value] === b[value])
   }
   return false
 }
