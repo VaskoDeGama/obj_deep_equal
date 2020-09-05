@@ -48,6 +48,12 @@ describe('DeepEqual:', () => {
       const result = objDeepEqual(obj1, obj2)
       expect(result).toBeFalsy()
     })
+    test('should be false if compare no same simple  objects ', () => {
+      const obj1 = { a: 'str', c: 'abc' }
+      const obj2 = { a: 'str' }
+      const result = objDeepEqual(obj1, obj2)
+      expect(result).toBeFalsy()
+    })
     test('should be true if compare objects with same methods', () => {
       const method = () => {}
       const obj1 = { b: 2, a: 1, c: method }
