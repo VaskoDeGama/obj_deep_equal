@@ -17,7 +17,8 @@ function isSimple(value) {
 }
 
 /**
- *
+ * Function should return not empty array, which contains entries of
+ * passed object, where descriptors don't have "value" property
  * @param obj
  * @returns {[string, TypedPropertyDescriptor<*>][]}
  */

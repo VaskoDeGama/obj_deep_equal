@@ -69,19 +69,57 @@ describe('DeepEqual:', () => {
       const result = objDeepEqual(obj1, obj2)
       expect(result).toBeFalsy()
     })
-    test('should be false if compare objects with descriptors', () => {
-      const obj1 = {
-        a: 2,
-        get b() {
-          return this.a + 10
-        },
-      }
-      const obj2 = {
-        a: 2,
-        b: 12,
-      }
-      const result = objDeepEqual(obj1, obj2)
-      expect(result).toBeFalsy()
+
+    describe('getter/setter in object:', () => {
+      test('should be false if compare objects with descriptors', () => {
+        const obj1 = {
+          a: 2,
+          _b: 0,
+          get b() {
+            return this._b + 11
+          },
+          set b(value) {
+            this._b = value
+          },
+        }
+        const obj2 = {
+          a: 2,
+          _b: 0,
+          get b() {
+            return this._b + 10
+          },
+          set b(value) {
+            this._b = value + 100
+          },
+        }
+
+        const result = objDeepEqual(obj1, obj2)
+        expect(result).toBeFalsy()
+      })
+      test('should be true if compare objects with same descriptors', () => {
+        const obj1 = {
+          a: 2,
+          _b: null,
+          get b() {
+            return this._b + 10
+          },
+          set b(value) {
+            this._b = value
+          },
+        }
+        const obj2 = {
+          a: 2,
+          _b: null,
+          get b() {
+            return this._b + 10
+          },
+          set b(value) {
+            this._b = value
+          },
+        }
+        const result = objDeepEqual(obj1, obj2)
+        expect(result).toBeTruthy()
+      })
     })
 
     describe('symbols:', () => {
@@ -207,37 +245,6 @@ describe('DeepEqual:', () => {
         }
       }
       expect(objDeepEqual(Woman, Man)).toBeFalsy()
-    })
-    test('should be true if compare one instance of class', () => {
-      class Person {
-        constructor(personName, personAge) {
-          this.name = personName
-          this.age = personAge
-        }
-
-        get info() {
-          return this.name
-        }
-      }
-
-      const ivan = new Person('Ivan', 23)
-      expect(objDeepEqual(ivan, ivan)).toBeTruthy()
-    })
-
-    test('should be true if compare two instance of one class', () => {
-      class Person {
-        constructor(personName, personAge) {
-          this.name = personName
-          this.age = personAge
-        }
-
-        get info() {
-          return this.name
-        }
-      }
-
-      const ivan = new Person('Ivan', 23)
-      expect(objDeepEqual(ivan, ivan)).toBeTruthy()
     })
   })
 
