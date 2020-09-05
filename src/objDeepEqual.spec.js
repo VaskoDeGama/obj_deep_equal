@@ -48,10 +48,32 @@ describe('DeepEqual:', () => {
       const result = objDeepEqual(obj1, obj2)
       expect(result).toBeFalsy()
     })
-    test('should be true if compare objects with methods', () => {
+    test('should be true if compare objects with same methods', () => {
       const method = () => {}
       const obj1 = { b: 2, a: 1, c: method }
       const obj2 = { a: 1, b: 2, c: method }
+      const result = objDeepEqual(obj1, obj2)
+      expect(result).toBeTruthy()
+    })
+    test('should be true if compare objects with not same methods', () => {
+      const method = () => {}
+      const method2 = () => {}
+      const obj1 = { b: 2, a: 1, c: method }
+      const obj2 = { a: 1, b: 2, c: method2 }
+      const result = objDeepEqual(obj1, obj2)
+      expect(result).toBeTruthy()
+    })
+    test('should be false if compare objects with descriptors', () => {
+      const obj1 = {
+        a: 2,
+        get b() {
+          return this.a + 10
+        },
+      }
+      const obj2 = {
+        a: 2,
+        b: 12,
+      }
       const result = objDeepEqual(obj1, obj2)
       expect(result).toBeTruthy()
     })
@@ -81,6 +103,7 @@ describe('DeepEqual:', () => {
     })
   })
 
+  // classes
   describe('classes:', () => {
     test('should be true if compare one instance of class', () => {
       class Person {
@@ -236,79 +259,6 @@ describe('DeepEqual:', () => {
       expect(result).toBeFalsy()
     })
   })
-
-  // no typical types
-  // describe('not typical types', () => {
-  //   test('should be true if compare same Map', () => {
-  //     const type1 = new Map([
-  //       [1, 'one'],
-  //       [2, 'two'],
-  //       [3, 'three'],
-  //     ])
-  //     const type2 = new Map([
-  //       [1, 'one'],
-  //       [2, 'two'],
-  //       [3, 'three'],
-  //     ])
-  //     const result = objDeepEqual(type1, type2)
-  //     expect(result).toBeTruthy()
-  //   })
-  //   test('should be false if compare notSame Map', () => {
-  //     const type1 = new Map([
-  //       [1, 'one'],
-  //       [2, 'two'],
-  //       [3, 'three'],
-  //     ])
-  //     const type2 = new Map([
-  //       [1, 'two'],
-  //       [2, 'two'],
-  //       [3, 'three'],
-  //     ])
-  //     const result = objDeepEqual(type1, type2)
-  //     expect(result).toBeFalsy()
-  //   })
-  //   test('should be true if compare same Set', () => {
-  //     const type1 = new Set('TestString')
-  //     const type2 = new Set('TestString')
-  //     const result = objDeepEqual(type1, type2)
-  //     expect(result).toBeTruthy()
-  //   })
-  //   test('should be false if compare notSame Set', () => {
-  //     const type1 = new Set('TestString')
-  //     const type2 = new Set('test')
-  //     const result = objDeepEqual(type1, type2)
-  //     expect(result).toBeFalsy()
-  //   })
-  //   test('should be true if compare same WeakMap', () => {
-  //     const key = { a: 1 }
-  //     const value = 'value'
-  //     const type1 = new WeakMap()
-  //     type1.set(key, value)
-  //     const type2 = type1
-  //     const result = objDeepEqual(type1, type2)
-  //     expect(result).toBeTruthy()
-  //   })
-  //   test('should be true if compare same WeakSet', () => {
-  //     const value = { a: 1 }
-  //     const type1 = new WeakSet()
-  //     type1.add(value)
-  //     const type2 = type1
-  //     const result = objDeepEqual(type1, type2)
-  //     expect(result).toBeTruthy()
-  //   })
-  //   test('should be true if compare same Date', () => {
-  //     const type1 = new Date()
-  //     const type2 = new Date()
-  //     const result = objDeepEqual(type1, type2)
-  //     expect(result).toBeTruthy()
-  //   })
-  //   test('should be false if compare not same Date', () => {
-  //     const type1 = new Date()
-  //     const type2 = new Date(type1 + 1)
-  //     const result = objDeepEqual(type1, type2)
-  //     expect(result).toBeFalsy()
-  //   })
-  // })
 
   // simple type
   describe('compare simple same types', () => {
