@@ -75,7 +75,7 @@ describe('DeepEqual:', () => {
         b: 12,
       }
       const result = objDeepEqual(obj1, obj2)
-      expect(result).toBeTruthy()
+      expect(result).toBeFalsy()
     })
 
     describe('symbols:', () => {

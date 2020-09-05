@@ -17,6 +17,19 @@ function isSimple(value) {
 }
 
 /**
+ *
+ * @param obj
+ * @returns {[string, TypedPropertyDescriptor<*>][]}
+ */
+function isHaveGetSet(obj) {
+  return Object.entries(Object.getOwnPropertyDescriptors(obj)).filter(
+    ([, descriptor]) => {
+      return Object.hasOwnProperty.call(descriptor, 'value')
+    }
+  )
+}
+
+/**
  * Deep comparison function
  * Map,Set,Date = compares by instanceof and value
  * WeakMap,WeakSet,Function, = compares by link
@@ -51,6 +64,10 @@ function objDeepEqual(a, b) {
     if (keysB.length !== keysA.length) {
       return false
     }
+    if (isHaveGetSet(b).length !== isHaveGetSet(a).length) {
+      return false
+    }
+
     return keysA.every((value) => a[value] === b[value])
   }
   return false
