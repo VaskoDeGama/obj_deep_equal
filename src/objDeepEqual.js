@@ -76,4 +76,5 @@ function objDeepEqual(a, b) {
 module.exports = {
   isSimple,
   objDeepEqual,
+  isHaveGetSet,
 }
