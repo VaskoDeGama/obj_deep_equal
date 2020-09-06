@@ -71,7 +71,7 @@ describe('DeepEqual:', () => {
     })
 
     describe('getter/setter in object:', () => {
-      test('should be false if compare objects with descriptors', () => {
+      test('should be false if compare objects with get/set', () => {
         const obj1 = {
           a: 2,
           _b: 0,
@@ -96,27 +96,32 @@ describe('DeepEqual:', () => {
         const result = objDeepEqual(obj1, obj2)
         expect(result).toBeFalsy()
       })
-      test('should be true if compare objects with same descriptors', () => {
+      test('should be true if compare objects with same get/set', () => {
+        const getter = function () {
+          return this._b + 10
+        }
+        const setter = function (value) {
+          this._b = value
+        }
+
         const obj1 = {
           a: 2,
           _b: null,
-          get b() {
-            return this._b + 10
-          },
-          set b(value) {
-            this._b = value
-          },
         }
+
+        Object.defineProperty(obj1, 'b', {
+          get: getter,
+          set: setter,
+        })
+
         const obj2 = {
           a: 2,
           _b: null,
-          get b() {
-            return this._b + 10
-          },
-          set b(value) {
-            this._b = value
-          },
         }
+        Object.defineProperty(obj2, 'b', {
+          get: getter,
+          set: setter,
+        })
         const result = objDeepEqual(obj1, obj2)
         expect(result).toBeTruthy()
       })

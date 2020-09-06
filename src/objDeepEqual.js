@@ -31,6 +31,22 @@ function isHaveGetSet(obj) {
 }
 
 /**
+ *
+ * @param descriptorsKeyA
+ * @param descriptorsKeyB
+ * @returns {boolean}
+ */
+
+function compareByDescriptors(descriptorsKeyA, descriptorsKeyB) {
+  return Reflect.ownKeys(descriptorsKeyA).every((key) => {
+    return (
+      Object.hasOwnProperty.call(descriptorsKeyB, key) &&
+      descriptorsKeyA[key] === descriptorsKeyB[key]
+    )
+  })
+}
+
+/**
  * Deep comparison function
  * Map,Set,Date = compares by instanceof and value
  * WeakMap,WeakSet,Function, = compares by link
@@ -54,22 +70,20 @@ function objDeepEqual(a, b) {
     if (typeof a === 'function') {
       return a === b
     }
-    const keysA = [
-      ...Object.getOwnPropertyNames(a),
-      ...Object.getOwnPropertySymbols(a),
-    ]
-    const keysB = [
-      ...Object.getOwnPropertyNames(b),
-      ...Object.getOwnPropertySymbols(b),
-    ]
+    const keysA = Reflect.ownKeys(a)
+    const keysB = Reflect.ownKeys(b)
     if (keysB.length !== keysA.length) {
       return false
     }
-    if (isHaveGetSet(b).length !== isHaveGetSet(a).length) {
-      return false
-    }
-
-    return keysA.every((value) => a[value] === b[value])
+    return keysA.every((key) => {
+      return (
+        Object.hasOwnProperty.call(b, key) &&
+        compareByDescriptors(
+          Object.getOwnPropertyDescriptor(a, key),
+          Object.getOwnPropertyDescriptor(b, key)
+        )
+      )
+    })
   }
   return false
 }
@@ -78,4 +92,5 @@ module.exports = {
   isSimple,
   objDeepEqual,
   isHaveGetSet,
+  compareByDescriptors,
 }
