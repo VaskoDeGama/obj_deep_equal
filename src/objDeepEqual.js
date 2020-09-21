@@ -31,7 +31,7 @@ function isHaveGetSet(obj) {
 }
 
 /**
- *
+ * Compare property by descriptors
  * @param descriptorsKeyA
  * @param descriptorsKeyB
  * @returns {boolean}
@@ -41,7 +41,7 @@ function compareByDescriptors(descriptorsKeyA, descriptorsKeyB) {
   return Reflect.ownKeys(descriptorsKeyA).every((key) => {
     return (
       Object.hasOwnProperty.call(descriptorsKeyB, key) &&
-      descriptorsKeyA[key] === descriptorsKeyB[key]
+      objDeepEqual(descriptorsKeyA[key], descriptorsKeyB[key])
     )
   })
 }
@@ -56,6 +56,9 @@ function compareByDescriptors(descriptorsKeyA, descriptorsKeyB) {
  */
 
 function objDeepEqual(a, b) {
+  if (Number.isNaN(a) || Number.isNaN(b)) {
+    return false
+  }
   if (a === null || b === null) {
     return a === b
   }
@@ -65,7 +68,7 @@ function objDeepEqual(a, b) {
 
   if (Object.getPrototypeOf(a) === Object.getPrototypeOf(b)) {
     if (Array.isArray(a)) {
-      return a.every((value, index) => value === b[index])
+      return a.every((value, index) => objDeepEqual(value, b[index]))
     }
     if (typeof a === 'function') {
       return a === b

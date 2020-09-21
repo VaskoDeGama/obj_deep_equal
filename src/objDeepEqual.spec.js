@@ -125,6 +125,26 @@ describe('DeepEqual:', () => {
         const result = objDeepEqual(obj1, obj2)
         expect(result).toBeTruthy()
       })
+      test('descriptors', () => {
+        const obj1 = {}
+        const obj2 = {}
+        Object.defineProperty(obj1, 'a', {
+          configurable: true,
+          enumerable: false,
+          writable: true,
+          value: null,
+        })
+
+        Object.defineProperty(obj2, 'a', {
+          configurable: false,
+          enumerable: false,
+          writable: true,
+          value: null,
+        })
+
+        const result = objDeepEqual(obj1, obj2)
+        expect(result).toBeFalsy()
+      })
     })
 
     describe('symbols:', () => {
@@ -279,6 +299,147 @@ describe('DeepEqual:', () => {
       expect(result).toBeFalsy()
     })
   })
+  //recursion
+  describe('compare with recursion', () => {
+    test('ARRAYS of OBJ same', () => {
+      const arr1 = Array.from({ length: 10 }, (a, k) => {
+        return {
+          a: k + 1,
+        }
+      })
+      const arr2 = Array.from({ length: 10 }, (a, k) => {
+        return {
+          a: k + 1,
+        }
+      })
+      const result = objDeepEqual(arr1, arr2)
+      expect(result).toBeTruthy()
+    })
+    test('ARRAYS of OBJ not same', () => {
+      const arr1 = Array.from({ length: 10 }, (a, k) => {
+        return {
+          a: k + 1,
+        }
+      })
+      const arr2 = Array.from({ length: 9 }, (a, k) => {
+        return {
+          k: a + 1,
+        }
+      })
+      const result = objDeepEqual(arr1, arr2)
+      expect(result).toBeFalsy()
+    })
+    test('ARRAYS of deep OBJ same', () => {
+      const symbolKey = Symbol('key')
+      const arr1 = Array.from({ length: 9 }, (a, k) => {
+        return {
+          k: {
+            obj: 'string',
+            obj2: {
+              k: 1 + 2,
+              symbolKey: 'key',
+            },
+          },
+        }
+      })
+      const func = () => {}
+      arr1.forEach((item) => (item.k.obj2[symbolKey] = func))
+      arr1.forEach((item) => (item.k.obj2['null'] = null))
+      const arr2 = Array.from({ length: 9 }, (a, k) => {
+        return {
+          k: {
+            obj: 'string',
+            obj2: {
+              k: 1 + 2,
+              symbolKey: 'key',
+            },
+          },
+        }
+      })
+      arr2.forEach((item) => (item.k.obj2[symbolKey] = func))
+      arr2.forEach((item) => (item.k.obj2['null'] = null))
+      const result = objDeepEqual(arr1, arr2)
+      expect(result).toBeTruthy()
+    })
+    test('Big deep OBJ not same', () => {
+      const obj1 = {
+        data: {
+          posts: [
+            {
+              id: 1,
+              title: 'Post 1',
+            },
+            {
+              id: 2,
+              title: 'Post 2',
+            },
+            {
+              id: 3,
+              title: 'Post 3',
+            },
+          ],
+          comments: [
+            {
+              id: 1,
+              body: 'some comment',
+              postId: 1,
+            },
+            {
+              id: 2,
+              body: 'some comment',
+              postId: 1,
+            },
+          ],
+          profile: {
+            name: 'typicode',
+          },
+        },
+      }
+      const obj2 = {
+        data: {
+          posts: [
+            {
+              id: 1,
+              title: 'Post 1',
+            },
+            {
+              id: 2,
+              title: 'Post 2',
+            },
+            {
+              id: 3,
+              title: 'Post 3',
+            },
+          ],
+          comments: [
+            {
+              id: 1,
+              body: 'some comment',
+              postId: 2,
+            },
+            {
+              id: 2,
+              body: 'some comment',
+              postId: 1,
+            },
+          ],
+          profile: {
+            name: 'typicode',
+          },
+        },
+      }
+      const result = objDeepEqual(obj1, obj2)
+      expect(result).toBeFalsy()
+    })
+    test('OBJ By myself OBJ not same', () => {
+      const obj1 = {}
+      const obj2 = {}
+      obj1.key = obj2
+      obj2.key = obj1
+      const result = objDeepEqual(obj1, obj2)
+      expect(result).toBeFalsy()
+    })
+  })
 
   // simple type
   describe('compare simple same types', () => {
@@ -317,6 +478,12 @@ describe('DeepEqual:', () => {
       const type2 = 123n
       const result = objDeepEqual(type1, type2)
       expect(result).toBeTruthy()
+    })
+    test('should be false if NaN', () => {
+      const type1 = NaN
+      const type2 = 1
+      const result = objDeepEqual(type1, type2)
+      expect(result).toBeFalsy()
     })
   })
 })
