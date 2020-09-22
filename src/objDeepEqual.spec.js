@@ -485,7 +485,7 @@ describe('DeepEqual:', () => {
       const result = objDeepEqual(a, b)
       expect(result).toBeFalsy()
     })
-    test('Deep recursion link true', () => {
+    test('Deep recursion 1 link true', () => {
       const a = { a: { a: {} } }
       a.a.a.a = a
       const b = { a: { a: {} } }
@@ -493,7 +493,7 @@ describe('DeepEqual:', () => {
       const result = objDeepEqual(a, b)
       expect(result).toBeTruthy()
     })
-    test('Deep recursion link false', () => {
+    test('Deep recursion 2 link true', () => {
       const a = { a: { a: {} } }
       a.a.a.a = a
       const b = { a: { a: {} } }
@@ -501,13 +501,21 @@ describe('DeepEqual:', () => {
       const result = objDeepEqual(a, b)
       expect(result).toBeTruthy()
     })
-    test('Deep recursion link false', () => {
+    test('Deep recursion 3 link false', () => {
       const a = { a: { a: {} } }
       a.a.a.b = a
-      const b = { a: { a: { a: { a: {} } } } }
+      const b = { a: { a: {} } }
       b.a.a.b = a
       const result = objDeepEqual(a, b)
       expect(result).toBeFalsy()
+    })
+    test('Deep recursion 4 link true', () => {
+      const a = { a: { a: { a: { b: {} } } } }
+      const b = { a: { a: { a: { b: {} } } } }
+      b.a.a.a.b = a
+      a.a.a.a.b = b
+      const result = objDeepEqual(a, b)
+      expect(result).toBeTruthy()
     })
   })
 
@@ -556,4 +564,6 @@ describe('DeepEqual:', () => {
       expect(result).toBeFalsy()
     })
   })
+
+  describe('COMPLEX tests', () => {})
 })
