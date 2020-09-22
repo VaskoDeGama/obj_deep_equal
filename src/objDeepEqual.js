@@ -36,7 +36,6 @@ function isHaveGetSet(obj) {
  * @param descriptorsKeyB
  * @param scopeA
  * @param scopeB
- * @param level
  * @returns {boolean}
  */
 
@@ -44,19 +43,12 @@ function compareByDescriptors(
   descriptorsKeyA,
   descriptorsKeyB,
   scopeA,
-  scopeB,
-  level
+  scopeB
 ) {
   return Reflect.ownKeys(descriptorsKeyA).every((key) => {
     return (
       Object.hasOwnProperty.call(descriptorsKeyB, key) &&
-      objDeepEqual(
-        descriptorsKeyA[key],
-        descriptorsKeyB[key],
-        scopeA,
-        scopeB,
-        level
-      )
+      objDeepEqual(descriptorsKeyA[key], descriptorsKeyB[key], scopeA, scopeB)
     )
   })
 }
@@ -69,11 +61,13 @@ function compareByDescriptors(
  * @param b
  * @param scopeA
  * @param scopeB
- * @param level
  * @returns {boolean}
  */
 
 function objDeepEqual(a, b, scopeA = new Map(), scopeB = new Map()) {
+  if (Number.isNaN(a) && Number.isNaN(b)) {
+    return true
+  }
   if (Number.isNaN(a) || Number.isNaN(b)) {
     return false
   }
@@ -85,25 +79,19 @@ function objDeepEqual(a, b, scopeA = new Map(), scopeB = new Map()) {
   }
 
   if (Object.getPrototypeOf(a) === Object.getPrototypeOf(b)) {
-    if (Array.isArray(a)) {
-      return a.every((value, index) =>
-        objDeepEqual(value, b[index], scopeA, scopeB)
-      )
-    }
     if (typeof a === 'function') {
       return a === b
     }
 
-    // dich
     const scopeLevelA = scopeA.get(a)
     const scopeLevelB = scopeB.get(b)
 
     if (!scopeLevelA) {
-      scopeA.set(a, scopeA.size)
+      scopeA.set(a, scopeA.size + 1)
     }
 
     if (!scopeLevelB) {
-      scopeB.set(b, scopeB.size)
+      scopeB.set(b, scopeB.size + 1)
     }
 
     if (scopeLevelA && scopeLevelB) {
@@ -113,8 +101,6 @@ function objDeepEqual(a, b, scopeA = new Map(), scopeB = new Map()) {
     if (scopeA.size !== scopeB.size) {
       return false
     }
-
-    // --------------------------
 
     const keysA = Reflect.ownKeys(a)
     const keysB = Reflect.ownKeys(b)

@@ -69,7 +69,14 @@ describe('DeepEqual:', () => {
       const result = objDeepEqual(obj1, obj2)
       expect(result).toBeFalsy()
     })
+    test('should be false if compare objects with not same array', () => {
+      const obj = { a: 1, arr: [1, 2, 3] }
+      const other = { a: 1, arr: [1, 2, 3, 4] }
+      const result = objDeepEqual(obj, other)
+      expect(result).toBeFalsy()
+    })
 
+    //get set
     describe('getter/setter in object:', () => {
       test('should be false if compare objects with get/set', () => {
         const obj1 = {
@@ -298,7 +305,16 @@ describe('DeepEqual:', () => {
       const result = objDeepEqual(obj1, obj2)
       expect(result).toBeFalsy()
     })
+    test('should be true if compare array with additional property', () => {
+      const arr1 = [1, 2, 3]
+      const arr2 = [1, 2, 3]
+      arr1.test = 'test'
+      arr2.test = 'test'
+      const result = objDeepEqual(arr2, arr1)
+      expect(result).toBeTruthy()
+    })
   })
+
   //recursion
   describe('compare with recursion', () => {
     test('ARRAYS of OBJ same', () => {
@@ -517,6 +533,14 @@ describe('DeepEqual:', () => {
       const result = objDeepEqual(a, b)
       expect(result).toBeTruthy()
     })
+
+    test('xnj ', () => {
+      const a = {}
+      a.a = a
+      const b = {}
+      b.a = b
+      expect(objDeepEqual(a, b)).toBeTruthy()
+    })
   })
 
   // simple type
@@ -558,11 +582,17 @@ describe('DeepEqual:', () => {
       expect(result).toBeTruthy()
     })
 
-    test('should be false if NaN', () => {
+    test('should be false if one NaN', () => {
       const type1 = NaN
       const type2 = 1
       const result = objDeepEqual(type1, type2)
       expect(result).toBeFalsy()
+    })
+    test('should be true if two NaN', () => {
+      const type1 = NaN
+      const type2 = NaN
+      const result = objDeepEqual(type1, type2)
+      expect(result).toBeTruthy()
     })
   })
 
