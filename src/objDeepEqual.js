@@ -117,9 +117,7 @@ function objDeepEqual(a, b, scopeA = new Map(), scopeB = new Map(), level = 0) {
     }
 
     // --------------------------
-    // if (a === b) {
-    //   return true
-    // }
+
     const keysA = Reflect.ownKeys(a)
     const keysB = Reflect.ownKeys(b)
     if (keysB.length !== keysA.length) {

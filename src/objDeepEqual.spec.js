@@ -441,6 +441,42 @@ describe('DeepEqual:', () => {
       const result = objDeepEqual(obj1, obj1)
       expect(result).toBeTruthy()
     })
+    test('OBJ loop link on self false', () => {
+      const obj1 = {}
+      obj1.key = {
+        key2: {
+          key4: {},
+        },
+      }
+      const obj2 = {}
+      obj2.key = {
+        key2: {
+          key3: {},
+        },
+      }
+      obj1.key.key2.ke3 = obj2
+      obj2.key.key2.ke4 = obj1
+      const result = objDeepEqual(obj1, obj2)
+      expect(result).toBeFalsy()
+    })
+    test('OBJ loop link on self true', () => {
+      const obj1 = {}
+      obj1.key = {
+        key2: {
+          key3: {},
+        },
+      }
+      const obj2 = {}
+      obj2.key = {
+        key2: {
+          key3: {},
+        },
+      }
+      obj1.key.key2.ke3 = obj2
+      obj2.key.key2.ke3 = obj1
+      const result = objDeepEqual(obj1, obj2)
+      expect(result).toBeTruthy()
+    })
     test('Deep recursion link false', () => {
       const a = { a: { a: {} } }
       a.a.a.a = a
@@ -456,6 +492,22 @@ describe('DeepEqual:', () => {
       b.a.a.a = b
       const result = objDeepEqual(a, b)
       expect(result).toBeTruthy()
+    })
+    test('Deep recursion link false', () => {
+      const a = { a: { a: {} } }
+      a.a.a.a = a
+      const b = { a: { a: {} } }
+      b.a.a.a = b
+      const result = objDeepEqual(a, b)
+      expect(result).toBeTruthy()
+    })
+    test('Deep recursion link false', () => {
+      const a = { a: { a: {} } }
+      a.a.a.b = a
+      const b = { a: { a: { a: { a: {} } } } }
+      b.a.a.b = a
+      const result = objDeepEqual(a, b)
+      expect(result).toBeFalsy()
     })
   })
 
