@@ -73,7 +73,7 @@ function compareByDescriptors(
  * @returns {boolean}
  */
 
-function objDeepEqual(a, b, scopeA = new Map(), scopeB = new Map(), level = 0) {
+function objDeepEqual(a, b, scopeA = new Map(), scopeB = new Map()) {
   if (Number.isNaN(a) || Number.isNaN(b)) {
     return false
   }
@@ -87,7 +87,7 @@ function objDeepEqual(a, b, scopeA = new Map(), scopeB = new Map(), level = 0) {
   if (Object.getPrototypeOf(a) === Object.getPrototypeOf(b)) {
     if (Array.isArray(a)) {
       return a.every((value, index) =>
-        objDeepEqual(value, b[index], scopeA, scopeB, level + 1)
+        objDeepEqual(value, b[index], scopeA, scopeB)
       )
     }
     if (typeof a === 'function') {
@@ -95,17 +95,15 @@ function objDeepEqual(a, b, scopeA = new Map(), scopeB = new Map(), level = 0) {
     }
 
     // dich
-    let scopeLevelA = null
-    let scopeLevelB = null
-    if (!scopeA.has(a)) {
-      scopeA.set(a, level)
-    } else {
-      scopeLevelA = scopeA.get(a)
+    const scopeLevelA = scopeA.get(a)
+    const scopeLevelB = scopeB.get(b)
+
+    if (!scopeLevelA) {
+      scopeA.set(a, scopeA.size)
     }
-    if (!scopeB.has(b)) {
-      scopeB.set(b, level)
-    } else {
-      scopeLevelB = scopeB.get(b)
+
+    if (!scopeLevelB) {
+      scopeB.set(b, scopeB.size)
     }
 
     if (scopeLevelA && scopeLevelB) {
@@ -130,8 +128,7 @@ function objDeepEqual(a, b, scopeA = new Map(), scopeB = new Map(), level = 0) {
           Object.getOwnPropertyDescriptor(a, key),
           Object.getOwnPropertyDescriptor(b, key),
           scopeA,
-          scopeB,
-          level + 1
+          scopeB
         )
       )
     })
