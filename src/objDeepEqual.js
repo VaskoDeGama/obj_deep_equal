@@ -34,14 +34,29 @@ function isHaveGetSet(obj) {
  * Compare property by descriptors
  * @param descriptorsKeyA
  * @param descriptorsKeyB
+ * @param scopeA
+ * @param scopeB
+ * @param level
  * @returns {boolean}
  */
 
-function compareByDescriptors(descriptorsKeyA, descriptorsKeyB) {
+function compareByDescriptors(
+  descriptorsKeyA,
+  descriptorsKeyB,
+  scopeA,
+  scopeB,
+  level
+) {
   return Reflect.ownKeys(descriptorsKeyA).every((key) => {
     return (
       Object.hasOwnProperty.call(descriptorsKeyB, key) &&
-      objDeepEqual(descriptorsKeyA[key], descriptorsKeyB[key])
+      objDeepEqual(
+        descriptorsKeyA[key],
+        descriptorsKeyB[key],
+        scopeA,
+        scopeB,
+        level
+      )
     )
   })
 }
@@ -52,10 +67,13 @@ function compareByDescriptors(descriptorsKeyA, descriptorsKeyB) {
  * WeakMap,WeakSet,Function, = compares by link
  * @param a
  * @param b
+ * @param scopeA
+ * @param scopeB
+ * @param level
  * @returns {boolean}
  */
 
-function objDeepEqual(a, b) {
+function objDeepEqual(a, b, scopeA = new Map(), scopeB = new Map(), level = 0) {
   if (Number.isNaN(a) || Number.isNaN(b)) {
     return false
   }
@@ -68,11 +86,40 @@ function objDeepEqual(a, b) {
 
   if (Object.getPrototypeOf(a) === Object.getPrototypeOf(b)) {
     if (Array.isArray(a)) {
-      return a.every((value, index) => objDeepEqual(value, b[index]))
+      return a.every((value, index) =>
+        objDeepEqual(value, b[index], scopeA, scopeB, level + 1)
+      )
     }
     if (typeof a === 'function') {
       return a === b
     }
+
+    // dich
+    let scopeLevelA = null
+    let scopeLevelB = null
+    if (!scopeA.has(a)) {
+      scopeA.set(a, level)
+    } else {
+      scopeLevelA = scopeA.get(a)
+    }
+    if (!scopeB.has(b)) {
+      scopeB.set(b, level)
+    } else {
+      scopeLevelB = scopeB.get(b)
+    }
+
+    if (scopeLevelA && scopeLevelB) {
+      return scopeLevelA === scopeLevelB
+    }
+
+    if (scopeA.size !== scopeB.size) {
+      return false
+    }
+
+    // --------------------------
+    // if (a === b) {
+    //   return true
+    // }
     const keysA = Reflect.ownKeys(a)
     const keysB = Reflect.ownKeys(b)
     if (keysB.length !== keysA.length) {
@@ -83,7 +130,10 @@ function objDeepEqual(a, b) {
         Object.hasOwnProperty.call(b, key) &&
         compareByDescriptors(
           Object.getOwnPropertyDescriptor(a, key),
-          Object.getOwnPropertyDescriptor(b, key)
+          Object.getOwnPropertyDescriptor(b, key),
+          scopeA,
+          scopeB,
+          level + 1
         )
       )
     })

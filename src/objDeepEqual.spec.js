@@ -431,13 +431,31 @@ describe('DeepEqual:', () => {
       const result = objDeepEqual(obj1, obj2)
       expect(result).toBeFalsy()
     })
-    test('OBJ By myself OBJ not same', () => {
+    test('OBJ link on self', () => {
       const obj1 = {}
-      const obj2 = {}
-      obj1.key = obj2
-      obj2.key = obj1
-      const result = objDeepEqual(obj1, obj2)
+      obj1.key = {
+        key2: {
+          key3: obj1,
+        },
+      }
+      const result = objDeepEqual(obj1, obj1)
+      expect(result).toBeTruthy()
+    })
+    test('Deep recursion link false', () => {
+      const a = { a: { a: {} } }
+      a.a.a.a = a
+      const b = { a: {} }
+      b.a.a = a
+      const result = objDeepEqual(a, b)
       expect(result).toBeFalsy()
+    })
+    test('Deep recursion link true', () => {
+      const a = { a: { a: {} } }
+      a.a.a.a = a
+      const b = { a: { a: {} } }
+      b.a.a.a = b
+      const result = objDeepEqual(a, b)
+      expect(result).toBeTruthy()
     })
   })
 
