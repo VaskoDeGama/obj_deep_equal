@@ -557,6 +557,7 @@ describe('DeepEqual:', () => {
       const result = objDeepEqual(type1, type2)
       expect(result).toBeTruthy()
     })
+
     test('should be false if NaN', () => {
       const type1 = NaN
       const type2 = 1
