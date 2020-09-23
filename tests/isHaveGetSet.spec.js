@@ -1,4 +1,4 @@
-const { isHaveGetSet } = require('./objDeepEqual')
+const { isHaveGetSet } = require('../src/objDeepEqual')
 
 describe('isHaveGetSet', () => {
   test('will be define', () => {

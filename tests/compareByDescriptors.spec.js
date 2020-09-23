@@ -1,4 +1,4 @@
-const { compareByDescriptors } = require('./objDeepEqual')
+const { compareByDescriptors } = require('../src/objDeepEqual')
 
 expect.extend({
   toBeBoolean(received) {

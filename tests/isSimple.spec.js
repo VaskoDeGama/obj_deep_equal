@@ -1,4 +1,4 @@
-const { isSimple } = require('./objDeepEqual.js')
+const { isSimple } = require('../src/objDeepEqual.js')
 
 expect.extend({
   toBeBoolean(received) {
