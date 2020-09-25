@@ -1,4 +1,4 @@
-const { objDeepEqual } = require('../src/objDeepEqual.js')
+const { deepEqual } = require('../src/objDeepEqual.js')
 
 expect.extend({
   toBeBoolean(received) {
@@ -16,49 +16,49 @@ expect.extend({
 
 describe('DeepEqual:', () => {
   test('should be defined', () => {
-    expect(objDeepEqual).toBeDefined()
+    expect(deepEqual).toBeDefined()
   })
   test('should return boolean', () => {
-    const result = objDeepEqual({}, {})
+    const result = deepEqual({}, {})
     expect(result).toBeBoolean()
   })
 
   test('should be true if compare null', () => {
     const type1 = null
     const type2 = null
-    const result = objDeepEqual(type1, type2)
+    const result = deepEqual(type1, type2)
     expect(result).toBeTruthy()
   })
 
   describe('compare objects', () => {
     test('should be true if compare object by itself', () => {
       const obj = {}
-      const result = objDeepEqual(obj, obj)
+      const result = deepEqual(obj, obj)
       expect(result).toBeTruthy()
     })
     test('should be true if compare simple objects', () => {
       const obj1 = { a: 1, b: 2 }
       const obj2 = { a: 1, b: 2 }
-      const result = objDeepEqual(obj1, obj2)
+      const result = deepEqual(obj1, obj2)
       expect(result).toBeTruthy()
     })
     test('should be false if compare no same simple  objects ', () => {
       const obj1 = { a: 'str', c: 'abc' }
       const obj2 = { a: 'str', c: 'ab' }
-      const result = objDeepEqual(obj1, obj2)
+      const result = deepEqual(obj1, obj2)
       expect(result).toBeFalsy()
     })
     test('should be false if compare no same simple  objects ', () => {
       const obj1 = { a: 'str', c: 'abc' }
       const obj2 = { a: 'str' }
-      const result = objDeepEqual(obj1, obj2)
+      const result = deepEqual(obj1, obj2)
       expect(result).toBeFalsy()
     })
     test('should be true if compare objects with same methods', () => {
       const method = () => {}
       const obj1 = { b: 2, a: 1, c: method }
       const obj2 = { a: 1, b: 2, c: method }
-      const result = objDeepEqual(obj1, obj2)
+      const result = deepEqual(obj1, obj2)
       expect(result).toBeTruthy()
     })
     test('should be false if compare objects with not same methods', () => {
@@ -66,13 +66,13 @@ describe('DeepEqual:', () => {
       const method2 = () => {}
       const obj1 = { b: 2, a: 1, c: method }
       const obj2 = { a: 1, b: 2, c: method2 }
-      const result = objDeepEqual(obj1, obj2)
+      const result = deepEqual(obj1, obj2)
       expect(result).toBeFalsy()
     })
     test('should be false if compare objects with not same array', () => {
       const obj = { a: 1, arr: [1, 2, 3] }
       const other = { a: 1, arr: [1, 2, 3, 4] }
-      const result = objDeepEqual(obj, other)
+      const result = deepEqual(obj, other)
       expect(result).toBeFalsy()
     })
 
@@ -100,7 +100,7 @@ describe('DeepEqual:', () => {
           },
         }
 
-        const result = objDeepEqual(obj1, obj2)
+        const result = deepEqual(obj1, obj2)
         expect(result).toBeFalsy()
       })
       test('should be true if compare objects with same get/set', () => {
@@ -129,7 +129,7 @@ describe('DeepEqual:', () => {
           get: getter,
           set: setter,
         })
-        const result = objDeepEqual(obj1, obj2)
+        const result = deepEqual(obj1, obj2)
         expect(result).toBeTruthy()
       })
       test('descriptors', () => {
@@ -149,7 +149,7 @@ describe('DeepEqual:', () => {
           value: null,
         })
 
-        const result = objDeepEqual(obj1, obj2)
+        const result = deepEqual(obj1, obj2)
         expect(result).toBeFalsy()
       })
     })
@@ -163,7 +163,7 @@ describe('DeepEqual:', () => {
         const obj2 = {}
         obj2[key1] = 'key1'
         obj2.string = 'stringkey'
-        expect(objDeepEqual(obj1, obj2)).toBeTruthy()
+        expect(deepEqual(obj1, obj2)).toBeTruthy()
       })
       test('should be false if compare objects with not same Symbols key', () => {
         const key1 = Symbol('key1')
@@ -174,7 +174,7 @@ describe('DeepEqual:', () => {
         const obj2 = {}
         obj2[key2] = 'key2'
         obj2.string = 'stringkey'
-        expect(objDeepEqual(obj1, obj2)).toBeFalsy()
+        expect(deepEqual(obj1, obj2)).toBeFalsy()
       })
     })
   })
@@ -194,7 +194,7 @@ describe('DeepEqual:', () => {
       }
 
       const ivan = new Person('Ivan', 23)
-      expect(objDeepEqual(ivan, ivan)).toBeTruthy()
+      expect(deepEqual(ivan, ivan)).toBeTruthy()
     })
 
     test('should be false if compare two instance of one class', () => {
@@ -211,7 +211,7 @@ describe('DeepEqual:', () => {
 
       const ivan = new Person('Ivan', 23)
       const oleg = new Person('Oleg', 23)
-      expect(objDeepEqual(ivan, oleg)).toBeFalsy()
+      expect(deepEqual(ivan, oleg)).toBeFalsy()
     })
 
     test('should be false if compare two instance of two class', () => {
@@ -239,7 +239,7 @@ describe('DeepEqual:', () => {
 
       const olga = new Woman('Olga', 23)
       const oleg = new Man('Oleg', 23)
-      expect(objDeepEqual(olga, oleg)).toBeFalsy()
+      expect(deepEqual(olga, oleg)).toBeFalsy()
     })
     test('should be true if compare class constructor', () => {
       class Woman {
@@ -252,7 +252,7 @@ describe('DeepEqual:', () => {
           return this.name
         }
       }
-      expect(objDeepEqual(Woman, Woman)).toBeTruthy()
+      expect(deepEqual(Woman, Woman)).toBeTruthy()
     })
     test('should be false if compare not same class constructor', () => {
       class Woman {
@@ -276,7 +276,7 @@ describe('DeepEqual:', () => {
           return this.name
         }
       }
-      expect(objDeepEqual(Woman, Man)).toBeFalsy()
+      expect(deepEqual(Woman, Man)).toBeFalsy()
     })
   })
 
@@ -286,7 +286,7 @@ describe('DeepEqual:', () => {
       const method = () => {}
       const obj1 = method
       const obj2 = method
-      const result = objDeepEqual(obj1, obj2)
+      const result = deepEqual(obj1, obj2)
       expect(result).toBeTruthy()
     })
   })
@@ -296,13 +296,13 @@ describe('DeepEqual:', () => {
     test('should be true if compare array', () => {
       const obj1 = ['str', null, 1]
       const obj2 = ['str', null, 1]
-      const result = objDeepEqual(obj1, obj2)
+      const result = deepEqual(obj1, obj2)
       expect(result).toBeTruthy()
     })
     test('should be false if compare not same array', () => {
       const obj1 = ['str', null, 1]
       const obj2 = ['str', undefined, 1]
-      const result = objDeepEqual(obj1, obj2)
+      const result = deepEqual(obj1, obj2)
       expect(result).toBeFalsy()
     })
     test('should be true if compare array with additional property', () => {
@@ -310,7 +310,7 @@ describe('DeepEqual:', () => {
       const arr2 = [1, 2, 3]
       arr1.test = 'test'
       arr2.test = 'test'
-      const result = objDeepEqual(arr2, arr1)
+      const result = deepEqual(arr2, arr1)
       expect(result).toBeTruthy()
     })
   })
@@ -328,7 +328,7 @@ describe('DeepEqual:', () => {
           a: k + 1,
         }
       })
-      const result = objDeepEqual(arr1, arr2)
+      const result = deepEqual(arr1, arr2)
       expect(result).toBeTruthy()
     })
     test('ARRAYS of OBJ not same', () => {
@@ -342,7 +342,7 @@ describe('DeepEqual:', () => {
           k: a + 1,
         }
       })
-      const result = objDeepEqual(arr1, arr2)
+      const result = deepEqual(arr1, arr2)
       expect(result).toBeFalsy()
     })
     test('ARRAYS of deep OBJ same', () => {
@@ -374,7 +374,7 @@ describe('DeepEqual:', () => {
       })
       arr2.forEach((item) => (item.k.obj2[symbolKey] = func))
       arr2.forEach((item) => (item.k.obj2['null'] = null))
-      const result = objDeepEqual(arr1, arr2)
+      const result = deepEqual(arr1, arr2)
       expect(result).toBeTruthy()
     })
     test('Big deep OBJ not same', () => {
@@ -444,7 +444,7 @@ describe('DeepEqual:', () => {
           },
         },
       }
-      const result = objDeepEqual(obj1, obj2)
+      const result = deepEqual(obj1, obj2)
       expect(result).toBeFalsy()
     })
     test('OBJ link on self', () => {
@@ -454,7 +454,7 @@ describe('DeepEqual:', () => {
           key3: obj1,
         },
       }
-      const result = objDeepEqual(obj1, obj1)
+      const result = deepEqual(obj1, obj1)
       expect(result).toBeTruthy()
     })
     test('OBJ loop link on self false', () => {
@@ -472,7 +472,7 @@ describe('DeepEqual:', () => {
       }
       obj1.key.key2.ke3 = obj2
       obj2.key.key2.ke4 = obj1
-      const result = objDeepEqual(obj1, obj2)
+      const result = deepEqual(obj1, obj2)
       expect(result).toBeFalsy()
     })
     test('OBJ loop link on self true', () => {
@@ -490,7 +490,7 @@ describe('DeepEqual:', () => {
       }
       obj1.key.key2.ke3 = obj2
       obj2.key.key2.ke3 = obj1
-      const result = objDeepEqual(obj1, obj2)
+      const result = deepEqual(obj1, obj2)
       expect(result).toBeTruthy()
     })
     test('Deep recursion link false', () => {
@@ -498,7 +498,7 @@ describe('DeepEqual:', () => {
       a.a.a.a = a
       const b = { a: {} }
       b.a.a = a
-      const result = objDeepEqual(a, b)
+      const result = deepEqual(a, b)
       expect(result).toBeFalsy()
     })
     test('Deep recursion 1 link true', () => {
@@ -506,7 +506,7 @@ describe('DeepEqual:', () => {
       a.a.a.a = a
       const b = { a: { a: {} } }
       b.a.a.a = b
-      const result = objDeepEqual(a, b)
+      const result = deepEqual(a, b)
       expect(result).toBeTruthy()
     })
     test('Deep recursion 2 link true', () => {
@@ -514,7 +514,7 @@ describe('DeepEqual:', () => {
       a.a.a.a = a
       const b = { a: { a: {} } }
       b.a.a.a = b
-      const result = objDeepEqual(a, b)
+      const result = deepEqual(a, b)
       expect(result).toBeTruthy()
     })
     test('Deep recursion 3 link false', () => {
@@ -522,7 +522,7 @@ describe('DeepEqual:', () => {
       a.a.a.b = a
       const b = { a: { a: {} } }
       b.a.a.b = a
-      const result = objDeepEqual(a, b)
+      const result = deepEqual(a, b)
       expect(result).toBeFalsy()
     })
     test('Deep recursion 4 link true', () => {
@@ -530,7 +530,7 @@ describe('DeepEqual:', () => {
       const b = { a: { a: { a: { b: {} } } } }
       b.a.a.a.b = a
       a.a.a.a.b = b
-      const result = objDeepEqual(a, b)
+      const result = deepEqual(a, b)
       expect(result).toBeTruthy()
     })
 
@@ -539,7 +539,7 @@ describe('DeepEqual:', () => {
       a.a = a
       const b = {}
       b.a = b
-      expect(objDeepEqual(a, b)).toBeTruthy()
+      expect(deepEqual(a, b)).toBeTruthy()
     })
   })
 
@@ -548,50 +548,50 @@ describe('DeepEqual:', () => {
     test('should be true if same numbers', () => {
       const type1 = 1
       const type2 = 1
-      const result = objDeepEqual(type1, type2)
+      const result = deepEqual(type1, type2)
       expect(result).toBeTruthy()
     })
     test('should be true if same strings', () => {
       const type1 = 'str'
       const type2 = 'str'
-      const result = objDeepEqual(type1, type2)
+      const result = deepEqual(type1, type2)
       expect(result).toBeTruthy()
     })
     test('should be true if same undefined', () => {
       const type1 = undefined
       const type2 = undefined
-      const result = objDeepEqual(type1, type2)
+      const result = deepEqual(type1, type2)
       expect(result).toBeTruthy()
     })
     test('should be true if same symbols', () => {
       const type1 = Symbol('a')
       const type2 = type1
-      const result = objDeepEqual(type1, type2)
+      const result = deepEqual(type1, type2)
       expect(result).toBeTruthy()
     })
     test('should be true if same boolean', () => {
       const type1 = true
       const type2 = true
-      const result = objDeepEqual(type1, type2)
+      const result = deepEqual(type1, type2)
       expect(result).toBeTruthy()
     })
     test('should be true if same BigInt', () => {
       const type1 = 123n
       const type2 = 123n
-      const result = objDeepEqual(type1, type2)
+      const result = deepEqual(type1, type2)
       expect(result).toBeTruthy()
     })
 
     test('should be false if one NaN', () => {
       const type1 = NaN
       const type2 = 1
-      const result = objDeepEqual(type1, type2)
+      const result = deepEqual(type1, type2)
       expect(result).toBeFalsy()
     })
     test('should be true if two NaN', () => {
       const type1 = NaN
       const type2 = NaN
-      const result = objDeepEqual(type1, type2)
+      const result = deepEqual(type1, type2)
       expect(result).toBeTruthy()
     })
   })

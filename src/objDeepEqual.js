@@ -55,8 +55,6 @@ function compareByDescriptors(
 
 /**
  * Deep comparison function
- * Map,Set,Date = compares by instanceof and value
- * WeakMap,WeakSet,Function, = compares by link
  * @param a
  * @param b
  * @param scopeA
@@ -122,7 +120,18 @@ function objDeepEqual(a, b, scopeA = new Map(), scopeB = new Map()) {
   return false
 }
 
+/**
+ * HOF (wrapper)
+ * @param a
+ * @param b
+ * @returns {boolean}
+ */
+const deepEqual = (a, b) => {
+  return objDeepEqual(a, b)
+}
+
 module.exports = {
+  deepEqual,
   isSimple,
   objDeepEqual,
   isHaveGetSet,
